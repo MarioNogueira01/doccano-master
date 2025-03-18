@@ -149,7 +149,7 @@ export default {
     },
     manageUsers() {
       // Lógica para redirecionar ou abrir um modal para gestão de utilizadores
-      this.$router.push({ name: 'manage-users' }); // Exemplo de redirecionamento para página de gestão
+      this.$router.push(this.localePath('/userManager')); // Exemplo de redirecionamento para página de gestão
     }
   }
 }
