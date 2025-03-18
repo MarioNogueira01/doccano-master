@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     "health_check.contrib.migrations",
     "health_check.contrib.celery",
     "django_cleanup",
-    "rest_framework",
     "todo_api",
 
 ]
@@ -235,7 +234,7 @@ CSRF_TRUSTED_ORIGINS = env.list(
         "http://127.0.0.1:3000",
         "http://0.0.0.0:3000",
         "http://localhost:3000",
-        "http://192.168.1.105:3000/"
+        "http://192.168.1.117:3000"
     ],
 )
 
@@ -244,7 +243,7 @@ ALLOWED_HOSTS = ["*"]
 
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
-    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://0.0.0.0:3000", "http://localhost:3000", "http://192.168.1.105:3000/"]
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://0.0.0.0:3000", "http://localhost:3000", "http://192.168.1.117:3000/"]
     CSRF_TRUSTED_ORIGINS += env.list("CSRF_TRUSTED_ORIGINS", [])
 
 # Batch size for importing data

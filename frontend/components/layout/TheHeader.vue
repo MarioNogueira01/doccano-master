@@ -62,6 +62,18 @@
             <v-switch :input-value="isRTL" :label="direction" class="ms-1" @change="toggleRTL" />
           </v-list-item-content>
         </v-list-item>
+      <!-- butao novo para gerir os utilizadores -->
+        <v-list-item @click="manageUsers"> <!-- metodo para ir para outra pagina-->
+          <v-list-item-icon>
+            <v-icon>{{ mdiCog }}</v-icon> <!-- icone que aparece -->
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ $t('manageUser') }} <!--nome que aparece-->
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <!-- acaba aqui -->
         <v-list-item @click="signout">
           <v-list-item-icon>
             <v-icon>{{ mdiLogout }}</v-icon>
@@ -78,7 +90,7 @@
 </template>
 
 <script>
-import { mdiLogout, mdiDotsVertical, mdiMenuDown, mdiHexagonMultiple } from '@mdi/js'
+import { mdiCog, mdiLogout, mdiDotsVertical, mdiMenuDown, mdiHexagonMultiple } from '@mdi/js'
 import { mapGetters, mapActions } from 'vuex'
 import TheColorModeSwitcher from './TheColorModeSwitcher'
 import LocaleMenu from './LocaleMenu'
@@ -106,6 +118,7 @@ export default {
         { title: this.$t('home.demoPolygSegm'), link: 'segmentation' },
         { title: this.$t('home.demoSTT'), link: 'speech-to-text' }
       ],
+      mdiCog,
       mdiLogout,
       mdiDotsVertical,
       mdiMenuDown,
@@ -133,6 +146,10 @@ export default {
     signout() {
       this.logout()
       this.$router.push(this.localePath('/'))
+    },
+    manageUsers() {
+      // Lógica para redirecionar ou abrir um modal para gestão de utilizadores
+      this.$router.push({ name: 'manage-users' }); // Exemplo de redirecionamento para página de gestão
     }
   }
 }
