@@ -1,30 +1,18 @@
 <template>
-  <v-data-table 
-    :headers="headers"
-    :items="sortedItems"
-    :search="search"
-    :loading="isLoading"
-    :loading-text="$t('generic.loading')"
-    :no-data-text="$t('vuetify.noDataAvailable')"
+  <v-data-table :headers="headers" :items="sortedItems" :search="search" :loading="isLoading"
+    :loading-text="$t('generic.loading')" 
+    :no-data-text="$t('vuetify.noDataAvailable')" 
     :footer-props="{
       showFirstLastPage: true,
       'items-per-page-options': [10, 50, 100],
       'items-per-page-text': $t('vuetify.itemsPerPageText'),
       'page-text': $t('dataset.pageText')
-    }"
-    item-key="id"
-    show-select
-    @input="$emit('input', $event)"
-    @update:options="updateOptions">
+    }" item-key="id" show-select @input="$emit('input', $event)" @update:options="updateOptions">
     <template #top>
-      <v-text-field 
-        v-model="search" 
-        :prepend-inner-icon="mdiMagnify" 
-        :label="$t('generic.search')" 
-        single-line
-        hide-details 
-        filled 
-      />
+      <v-text-field v-model="search" 
+      :prepend-inner-icon="mdiMagnify" 
+      :label="$t('generic.search')" single-line
+        hide-details filled />
     </template>
 
     <template #[`item.username`]="{ item }">
@@ -38,7 +26,11 @@
     </template>
     <template #[`item.last_login`]="{ item }">
       <span>
-        {{ dateFormat(dateParse(item.last_login, 'YYYY-MM-DDTHH:mm:ss'), 'YYYY/MM/DD HH:mm') }}
+        {{ item.last_login ? dateFormat(
+          dateParse(
+            item.last_login, 
+            'YYYY-MM-DDTHH:mm:ss'), 
+            'YYYY/MM/DD HH:mm') : '-' }}
       </span>
     </template>
   </v-data-table>
