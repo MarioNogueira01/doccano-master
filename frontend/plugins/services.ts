@@ -44,7 +44,8 @@ const plugin: Plugin = (_, inject) => {
     option: new OptionApplicationService(repositories.option),
     tag: new TagApplicationService(repositories.tag),
     bbox: new BoundingBoxApplicationService(repositories.boundingBox),
-    segmentation: new SegmentationApplicationService(repositories.segmentation)
+    segmentation: new SegmentationApplicationService(repositories.segmentation),
+    user: new UserApplicationService(repositories.user)
   }
   inject('services', services)
 }

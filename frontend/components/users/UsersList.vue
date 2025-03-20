@@ -1,72 +1,58 @@
 <template>
-  <v-data-table
-    :value="value"
-    :headers="headers"
-    :items="items"
-    :options.sync="options"
-    :server-items-length="total"
-    :loading="isLoading"
-    :loading-text="$t('generic.loading')"
-    :no-data-text="$t('vuetify.noDataAvailable')"
-    :footer-props="{
-      showFirstLastPage: true,
-      'items-per-page-options': [10, 50, 100],
-      'items-per-page-text': $t('vuetify.itemsPerPageText'),
-      'page-text': $t('dataset.pageText')
-    }"
-    item-key="id"
-    show-select
-    @input="$emit('input', $event)"
-  >
-    <template #top>
-      <v-text-field
-        v-model="search"
-        :prepend-inner-icon="mdiMagnify"
-        :label="$t('generic.search')"
-        single-line
-        hide-details
-        filled
-      />
-    </template>
-    <template #[`item.name`]="{ item }">
-      <nuxt-link :to="localePath(`/users/${item.id}`)">
-        <span>{{ item.name }}</span>
-      </nuxt-link>
-    </template>
-    <template #[`item.createdAt`]="{ item }">
-      <span>{{
-        dateFormat(dateParse(item.createdAt, 'YYYY-MM-DDTHH:mm:ss'), 'YYYY/MM/DD HH:mm')
-      }}</span>
-    </template>
-    <template #[`item.email`]="{ item }">
-      <span>{{ item.email }}</span>
-    </template>
-  </v-data-table>
+  <v-card>
+    <v-card-title>
+      <v-btn class="text-capitalize" color="primary" @click.stop="$router.push('users/create')">
+        {{ $t('generic.create') }}
+      </v-btn>
+    </v-card-title>
+
+    <!-- Tabela para exibir apenas o username -->
+    <v-data-table
+      :items="items"
+      :headers="headers"
+      item-key="id"
+      :loading="isLoading"
+      :server-items-length="total"
+      :loading-text="$t('generic.loading')"
+      :no-data-text="$t('vuetify.noDataAvailable')"
+    >
+      <template #top>
+        <v-text-field
+          v-model="search"
+          :prepend-inner-icon="mdiMagnify"
+          :label="$t('generic.search')"
+          single-line
+          hide-details
+          filled
+        />
+      </template>
+
+      <template #[`item.username`]="{ item }">
+        <span>{{ item.username }}</span> <!-- Exibindo o campo username -->
+      </template>
+      <template #[`item.email`]="{ item }">
+        <span>{{ item.email }}</span> <!-- Exibindo o campo username -->
+      </template>
+    </v-data-table>
+  </v-card>
 </template>
+
 
 <script lang="ts">
 import { mdiMagnify } from '@mdi/js'
-import { dateFormat } from '@vuejs-community/vue-filter-date-format'
-import { dateParse } from '@vuejs-community/vue-filter-date-parse'
-import { DataOptions } from 'vuetify/types'
-import Vue from 'vue'
-import { User } from '~/domain/models/user'  // Ajuste o caminho conforme necessário
+import type { PropType } from 'vue'
+import { UserItem } from '~/domain/models/user/user'
 
-export default Vue.extend({
+export default {
   props: {
+    items: {
+      type: Array as PropType<UserItem[]>,
+      default: () => [],
+      required: true
+    },
     isLoading: {
       type: Boolean,
       default: false,
-      required: true
-    },
-    items: {
-      type: Array as PropType<User[]>,
-      default: () => [],
-      required: true
-    },
-    value: {
-      type: Array as PropType<User[]>,
-      default: () => [],
       required: true
     },
     total: {
@@ -75,68 +61,27 @@ export default Vue.extend({
       required: true
     }
   },
-
+  
   data() {
     return {
-      search: this.$route.query.q,
-      options: {} as DataOptions,
-      mdiMagnify,
-      dateFormat,
-      dateParse
+      search: this.$route.query.q || '',
+      mdiMagnify
     }
   },
 
   computed: {
-    headers(): { text: any; value: string; sortable?: boolean }[] {
+    // Header apenas com 'username'
+    headers() {
       return [
-        { text: this.$t('name'), value: 'name' },
-        { text: this.$t('email'), value: 'email' },
-        { text: this.$t('createdAt'), value: 'createdAt' },
-        { text: 'Actions', value: 'actions', sortable: false }
+        { text: this.$t('username'), value: 'username' },
+        { text: this.$t('email'), value: 'email' } // Exibe apenas o campo 'username'
+
       ]
     }
-  },
-
-  watch: {
-    options: {
-      handler() {
-        this.updateQuery({
-          query: {
-            limit: this.options.itemsPerPage.toString(),
-            offset: ((this.options.page - 1) * this.options.itemsPerPage).toString(),
-            q: this.search
-          }
-        })
-      },
-      deep: true
-    },
-    search() {
-      this.updateQuery({
-        query: {
-          limit: this.options.itemsPerPage.toString(),
-          offset: '0',
-          q: this.search
-        }
-      })
-      this.options.page = 1
-    }
-  },
-
-  methods: {
-    updateQuery(payload: any) {
-      const { sortBy, sortDesc } = this.options
-      if (sortBy.length === 1 && sortDesc.length === 1) {
-        payload.query.sortBy = sortBy[0]
-        payload.query.sortDesc = sortDesc[0]
-      } else {
-        payload.query.sortBy = 'createdAt'
-        payload.query.sortDesc = true
-      }
-      this.$emit('update:query', payload)
-    }
   }
-})
+}
 </script>
+
 
 <style scoped>
 ::v-deep .v-data-table {

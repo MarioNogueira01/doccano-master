@@ -1,6 +1,6 @@
-import { Page } from '@/domain/models/page'
 import { UserItem } from '@/domain/models/user/user'
 import ApiService from '@/services/api.service'
+import { UserPage } from '~/domain/models/page'
 
 const sortableFieldList = ['username', 'isSuperuser', 'isStaff'] as const
 type SortableFields = (typeof sortableFieldList)[number]
@@ -24,7 +24,7 @@ export class SearchQuery {
 }
 
 function toModel(item: { [key: string]: any }): UserItem {
-  return new UserItem(item.id, item.username, item.is_superuser, item.is_staff)
+  return new UserItem(item.id, item.username, item.is_superuser, item.is_staff, item.email)
 }
 
 function toPayload(item: UserItem): { [key: string]: any } {
@@ -39,26 +39,27 @@ function toPayload(item: UserItem): { [key: string]: any } {
 export class APIUserRepository {
   constructor(private readonly request = ApiService) {}
 
-  async list(query: SearchQuery): Promise<Page<UserItem>> {
-    const fieldMapper = {
-      username: 'username',
-      isSuperuser: 'is_superuser',
-      isStaff: 'is_staff'
-    }
-    const sortBy = fieldMapper[query.sortBy]
-    const ordering = query.sortDesc ? `-${sortBy}` : `${sortBy}`
-    const url = `/users?limit=${query.limit}&offset=${query.offset}&q=${query.q}&ordering=${ordering}`
+  async list(query: SearchQuery): Promise<UserPage<UserItem>> {
+    const url = `/users`
     const response = await this.request.get(url)
-    return new Page(
-      response.data.count,
-      response.data.next,
-      response.data.previous,
-      response.data.results.map((user: { [key: string]: any }) => toModel(user))
-    )
+    console.log('query:',query)
+    // Verifique a resposta da API
+    console.log('Resposta da API 2', response.data)
+    
+    return new UserPage<UserItem>(
+      response.data.map((item: any) => toModel(item)));
   }
+  
+  
 
   async findById(id: string): Promise<UserItem> {
     const url = `/users/${id}`
+    const response = await this.request.get(url)
+    return toModel(response.data)
+  }
+
+  async getProfile(): Promise<UserItem> {
+    const url = '/me'
     const response = await this.request.get(url)
     return toModel(response.data)
   }

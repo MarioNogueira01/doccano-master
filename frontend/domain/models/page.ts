@@ -6,3 +6,9 @@ export class Page<T> {
     readonly items: T[]
   ) {}
 }
+
+export class UserPage<T> {
+  constructor(
+    readonly items: T[]
+  ) {}
+}
