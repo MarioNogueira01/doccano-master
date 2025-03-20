@@ -24,7 +24,7 @@ class Users(generics.ListAPIView):
     permission_classes = [IsAuthenticated & IsProjectAdmin]
     pagination_class = None
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    search_fields = ("username",)
+    search_fields = ("auth_user",)
 
 
 class UserCreation(generics.CreateAPIView):

@@ -8,12 +8,14 @@ import { TagApplicationService } from '@/services/application/tag/tagApplication
 import { BoundingBoxApplicationService } from '@/services/application/tasks/boundingBox/boundingBoxApplicationService'
 import { SegmentationApplicationService } from '@/services/application/tasks/segmentation/segmentationApplicationService'
 import { SequenceLabelingApplicationService } from '@/services/application/tasks/sequenceLabeling/sequenceLabelingApplicationService'
+import { UserApplicationService } from '~/services/application/user/userAplicationService'
 
 export interface Services {
   categoryType: LabelApplicationService
   spanType: LabelApplicationService
   relationType: LabelApplicationService
   project: ProjectApplicationService
+  user: UserApplicationService
   example: ExampleApplicationService
   sequenceLabeling: SequenceLabelingApplicationService
   option: OptionApplicationService
@@ -42,7 +44,8 @@ const plugin: Plugin = (_, inject) => {
     option: new OptionApplicationService(repositories.option),
     tag: new TagApplicationService(repositories.tag),
     bbox: new BoundingBoxApplicationService(repositories.boundingBox),
-    segmentation: new SegmentationApplicationService(repositories.segmentation)
+    segmentation: new SegmentationApplicationService(repositories.segmentation),
+    user: new UserApplicationService(repositories.user)
   }
   inject('services', services)
 }
