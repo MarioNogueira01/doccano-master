@@ -1,10 +1,7 @@
 <template>
   <v-data-table 
-    :value="value"
     :headers="headers"
-    :items="filteredItems"
-    :options.sync="options"
-    :server-items-length="total"
+    :items="sortedItems"
     :search="search"
     :loading="isLoading"
     :loading-text="$t('generic.loading')"
@@ -17,7 +14,8 @@
     }"
     item-key="id"
     show-select
-    @input="$emit('input', $event)">
+    @input="$emit('input', $event)"
+    @update:options="updateOptions">
     <template #top>
       <v-text-field 
         v-model="search" 
@@ -52,7 +50,6 @@ import { dateFormat } from '@vuejs-community/vue-filter-date-format'
 import { dateParse } from '@vuejs-community/vue-filter-date-parse'
 import type { PropType } from 'vue'
 import Vue from 'vue'
-import { DataOptions } from 'vuetify/types'
 import { UserItem } from '~/domain/models/user/user'
 
 export default Vue.extend({
@@ -66,24 +63,14 @@ export default Vue.extend({
       type: Array as PropType<UserItem[]>,
       default: () => [],
       required: true
-    },
-    value: {
-      type: Array as PropType<UserItem[]>,
-      default: () => [],
-      required: true
-    },
-    total: {
-      type: Number,
-      default: 0,
-      required: true
     }
   },
 
   data() {
     return {
       search: this.$route.query.q || '',
-      selected: [],
-      options: {} as DataOptions,
+      sortBy: 'username',
+      sortDesc: false,
       mdiMagnify,
       dateFormat,
       dateParse
@@ -93,10 +80,10 @@ export default Vue.extend({
   computed: {
     headers() {
       return [
-        { text: this.$t('username'), value: 'username' },
-        { text: this.$t('email'), value: 'email' },
-        { text: this.$t('SuperUser'), value: 'isSuperuser' },
-        { text: this.$t('last login'), value: 'last_login' }
+        { text: this.$t('username'), value: 'username', sortable: true },
+        { text: this.$t('email'), value: 'email', sortable: true },
+        { text: this.$t('SuperUser'), value: 'isSuperuser', sortable: true },
+        { text: this.$t('last login'), value: 'last_login', sortable: true }
       ]
     },
     filteredItems() {
@@ -106,6 +93,21 @@ export default Vue.extend({
         item.username.toLowerCase().includes(searchLower) ||
         item.email.toLowerCase().includes(searchLower)
       );
+    },
+    sortedItems() {
+      return [...this.filteredItems].sort((a, b) => {
+        const modifier = this.sortDesc ? -1 : 1;
+        if (a[this.sortBy] < b[this.sortBy]) return -1 * modifier;
+        if (a[this.sortBy] > b[this.sortBy]) return 1 * modifier;
+        return 0;
+      });
+    }
+  },
+
+  methods: {
+    updateOptions(options) {
+      this.sortBy = options.sortBy[0] || 'username';
+      this.sortDesc = options.sortDesc[0] || false;
     }
   }
 })
