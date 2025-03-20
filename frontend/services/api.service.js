@@ -38,6 +38,10 @@ class ApiService {
   delete(url, data = {}, config = {}) {
     return this.request('DELETE', url, data, config)
   }
+
+  getUsers() {
+    return this.get('/api/users/')  // Altera a URL para o endpoint correto que retorna os utilizadores
+  }
 }
 
 export default new ApiService()
