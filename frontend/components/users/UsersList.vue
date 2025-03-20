@@ -4,6 +4,7 @@
       <v-btn class="text-capitalize" color="primary" @click.stop="$router.push('users/create')">
         {{ $t('generic.create') }}
       </v-btn>
+      
     </v-card-title>
 
     <!-- Tabela para exibir apenas o username -->
@@ -12,6 +13,7 @@
       :headers="headers"
       item-key="id"
       :loading="isLoading"
+      :search="search"
       :server-items-length="total"
       :loading-text="$t('generic.loading')"
       :no-data-text="$t('vuetify.noDataAvailable')"
@@ -28,10 +30,22 @@
       </template>
 
       <template #[`item.username`]="{ item }">
-        <span>{{ item.username }}</span> <!-- Exibindo o campo username -->
+        <span>{{ item.username }}</span>
       </template>
       <template #[`item.email`]="{ item }">
-        <span>{{ item.email }}</span> <!-- Exibindo o campo username -->
+        <span>{{ item.email }}</span> 
+      </template>
+      <template #[`item.isSuperuser`]="{ item }">
+        <span>{{ item.isSuperuser ? 'Yes' : 'No' }}</span>
+      </template>
+      <template #[`item.last_login`]="{ item }">
+        <span>
+          <span>
+            {{
+              dateFormat(dateParse(item.last_login, 'YYYY-MM-DDTHH:mm:ss'), 'YYYY/MM/DD HH:mm')
+            }}
+          </span>
+        </span> 
       </template>
     </v-data-table>
   </v-card>
@@ -41,6 +55,8 @@
 <script lang="ts">
 import { mdiMagnify } from '@mdi/js'
 import type { PropType } from 'vue'
+import { dateFormat } from '@vuejs-community/vue-filter-date-format'
+import { dateParse } from '@vuejs-community/vue-filter-date-parse'
 import { UserItem } from '~/domain/models/user/user'
 
 export default {
@@ -65,7 +81,9 @@ export default {
   data() {
     return {
       search: this.$route.query.q || '',
-      mdiMagnify
+      mdiMagnify,
+      dateFormat,
+      dateParse
     }
   },
 
@@ -74,8 +92,10 @@ export default {
     headers() {
       return [
         { text: this.$t('username'), value: 'username' },
-        { text: this.$t('email'), value: 'email' } // Exibe apenas o campo 'username'
-
+        { text: this.$t('email'), value: 'email' }, // Exibe apenas o campo 'username'
+        { text: this.$t('SuperUser'), value: 'isSuperuser' },
+        { text: this.$t('last login'), value: 'last_login' },
+        
       ]
     }
   }

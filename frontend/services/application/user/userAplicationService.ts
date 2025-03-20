@@ -41,10 +41,11 @@ export class UserApplicationService {
     username: string, 
     isSuperuser: boolean, 
     isStaff: boolean, 
-    email: string
+    email: string,
+    last_login: string
   ): Promise<UserItem> {
     try {
-      const user = new UserItem(0, username, isSuperuser, isStaff, email)
+      const user = new UserItem(0, username, isSuperuser, isStaff, email, last_login)
       return await this.repository.create(user)
     } catch (e: any) {
       throw new Error(e.response.data.detail)

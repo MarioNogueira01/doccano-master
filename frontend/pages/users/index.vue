@@ -4,9 +4,21 @@
       <v-btn class="text-capitalize" color="primary" @click.stop="$router.push('users/create')">
         {{ $t('generic.create') }}
       </v-btn>
+      <v-btn class="text-capitalize ms-2" color="primary" :disabled="!canEdit" @click.stop="edit">
+        Clone
+      </v-btn>
+      <v-btn
+        class="text-capitalize ms-2"
+        :disabled="!canDelete"
+        outlined
+        @click.stop="dialogDelete = true"
+        >{{ $t('generic.delete') }}
+      </v-btn>
+      <v-dialog v-model="dialogDelete">
+        <form-delete :selected="selected" @cancel="dialogDelete = false" @remove="remove" />
+      </v-dialog>
     </v-card-title>
-
-    <!-- Mostrar o componente UsersList apenas quando isLoading for false -->
+    
     <users-list
       v-if="!isLoading && users.items.length > 0"
       v-model="selected"
@@ -20,6 +32,7 @@
 
 <script lang="ts">
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
 import UsersList from '~/components/users/UsersList.vue'
 import { UserItem } from '~/domain/models/user/user'
 import { UserPage } from '~/domain/models/page'
@@ -30,8 +43,13 @@ export default {
   components: {
     UsersList
   },
+  layout: 'users',
+
+  middleware: ['check-auth', 'auth'],
+
   data() {
     return {
+      dialogDelete: false,
       users: {} as UserPage<UserItem>,
       selected: [] as UserItem[],
       isLoading: false
@@ -41,11 +59,10 @@ export default {
   async fetch() {
     this.isLoading = true
     try {
-      // Realiza a requisição para obter os dados de usuários
       this.users = await this.$services.user.list(
         this.$route.query as unknown as SearchQueryData
       )
-      console.log('Users recebidos:', this.users)
+      // console.log('Users recebidos:', this.users)
     } catch (e) {
       console.error('Erro ao carregar usuários:', e)
     } finally {
@@ -53,10 +70,19 @@ export default {
     }
   },
 
-  // Usando o watch para observar mudanças na query da rota
+  computed: {
+    ...mapGetters('auth', ['isStaff']),
+    canDelete(): boolean {
+      return this.selected.length > 0
+    },
+
+    canEdit(): boolean {
+      return this.selected.length === 1
+    }
+  },
+
   watch: {
     '$route.query': _.debounce(function () {
-      // Só chama o fetch se houver uma mudança nas query params
       // @ts-ignore
       this.$fetch()
     }, 1000)
@@ -64,9 +90,17 @@ export default {
 
   methods: {
     updateQuery(query: object) {
-      // Atualiza a query da rota
       this.$router.push(query)
-    }
+    },
+
+    async remove() {
+      // TODO
+      // await this.$services.project.bulkDelete(this.selected)
+    },
+
+    async edit() {
+      // TODO
+    },
   }
 }
 </script>

@@ -24,7 +24,14 @@ export class SearchQuery {
 }
 
 function toModel(item: { [key: string]: any }): UserItem {
-  return new UserItem(item.id, item.username, item.is_superuser, item.is_staff, item.email)
+  return new UserItem(
+    item.id, 
+    item.username, 
+    item.is_superuser, 
+    item.is_staff, 
+    item.email, 
+    item.last_login
+  )
 }
 
 function toPayload(item: UserItem): { [key: string]: any } {
