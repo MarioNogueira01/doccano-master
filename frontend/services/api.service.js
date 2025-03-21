@@ -6,7 +6,11 @@ class ApiService {
   constructor() {
     this.instance = axios.create({
       baseURL: process.env.baseUrl,
+<<<<<<< HEAD
       withCredentials: true
+=======
+      withCredentials: true 
+>>>>>>> tentativa
     })
   }
 

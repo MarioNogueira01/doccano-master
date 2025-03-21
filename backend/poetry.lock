@@ -3047,7 +3047,11 @@ brotli = ["Brotli"]
 
 [extras]
 mssql = []
+<<<<<<< HEAD
 postgresql = ["psycopg2-binary"]
+=======
+postgresql = []
+>>>>>>> tentativa
 
 [metadata]
 lock-version = "2.1"

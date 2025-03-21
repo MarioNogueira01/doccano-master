@@ -1,5 +1,6 @@
 import { UserItem } from '@/domain/models/user/user'
 import ApiService from '@/services/api.service'
+<<<<<<< HEAD
 import { UserPage } from '~/domain/models/page'
 
 const sortableFieldList = ['username', 'isSuperuser', 'isStaff'] as const
@@ -41,11 +42,17 @@ function toPayload(item: UserItem): { [key: string]: any } {
     is_superuser: item.isSuperuser,
     is_staff: item.isStaff
   }
+=======
+
+function toModel(item: { [key: string]: any }): UserItem {
+  return new UserItem(item.id, item.username, item.is_superuser, item.is_staff)
+>>>>>>> tentativa
 }
 
 export class APIUserRepository {
   constructor(private readonly request = ApiService) {}
 
+<<<<<<< HEAD
   async list(query: SearchQuery): Promise<UserPage<UserItem>> {
     const url = `/users`
     const response = await this.request.get(url)
@@ -65,12 +72,15 @@ export class APIUserRepository {
     return toModel(response.data)
   }
 
+=======
+>>>>>>> tentativa
   async getProfile(): Promise<UserItem> {
     const url = '/me'
     const response = await this.request.get(url)
     return toModel(response.data)
   }
 
+<<<<<<< HEAD
   async create(item: UserItem): Promise<UserItem> {
     const url = `/users`
     const payload = toPayload(item)
@@ -87,5 +97,11 @@ export class APIUserRepository {
   async delete(userId: number): Promise<void> {
     const url = `/users/${userId}`
     await this.request.delete(url)
+=======
+  async list(query: string): Promise<UserItem[]> {
+    const url = `/users?q=${query}`
+    const response = await this.request.get(url)
+    return response.data.map((item: { [key: string]: any }) => toModel(item))
+>>>>>>> tentativa
   }
 }

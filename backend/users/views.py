@@ -24,12 +24,20 @@ class Users(generics.ListAPIView):
     permission_classes = [IsAuthenticated & IsProjectAdmin]
     pagination_class = None
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+<<<<<<< HEAD
     search_fields = ("auth_user",)
+=======
+    search_fields = ("username",)
+>>>>>>> tentativa
 
 
 class UserCreation(generics.CreateAPIView):
     serializer_class = RegisterSerializer
+<<<<<<< HEAD
     permission_classes = [IsAuthenticated & IsAdminUser]
+=======
+    permission_classes = [IsAuthenticated]
+>>>>>>> tentativa
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -40,4 +48,8 @@ class UserCreation(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user = serializer.save(self.request)
+<<<<<<< HEAD
         return user
+=======
+        return user
+>>>>>>> tentativa

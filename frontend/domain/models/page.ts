@@ -6,9 +6,12 @@ export class Page<T> {
     readonly items: T[]
   ) {}
 }
+<<<<<<< HEAD
 
 export class UserPage<T> {
   constructor(
     readonly items: T[]
   ) {}
 }
+=======
+>>>>>>> tentativa

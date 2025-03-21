@@ -71,8 +71,11 @@ INSTALLED_APPS = [
     "health_check.contrib.migrations",
     "health_check.contrib.celery",
     "django_cleanup",
+<<<<<<< HEAD
     "todo_api",
 
+=======
+>>>>>>> tentativa
 ]
 
 
@@ -224,6 +227,7 @@ if DATABASES["default"].get("ENGINE") == "sql_server.pyodbc":
 
 
 # Sessions and CSRF
+<<<<<<< HEAD
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", False)
@@ -237,13 +241,27 @@ CSRF_TRUSTED_ORIGINS = env.list(
         "http://192.168.1.117:3000"
     ],
 )
+=======
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()SRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", [])
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", False)
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", False)
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", [        "http://127.0.0.1:3000",
+        "http://0.0.0.0:3000",
+        "http://localhost:3000",
+        "http://192.168.1.82:3000" ])
+>>>>>>> tentativa
 
 # Allow all host headers
 ALLOWED_HOSTS = ["*"]
 
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
+<<<<<<< HEAD
     CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://0.0.0.0:3000", "http://localhost:3000", "http://192.168.1.117:3000/"]
+=======
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://0.0.0.0:3000", "http://localhost:3000", "http://192.168.1.82:3000"]
+>>>>>>> tentativa
     CSRF_TRUSTED_ORIGINS += env.list("CSRF_TRUSTED_ORIGINS", [])
 
 # Batch size for importing data

@@ -8,14 +8,20 @@ import { TagApplicationService } from '@/services/application/tag/tagApplication
 import { BoundingBoxApplicationService } from '@/services/application/tasks/boundingBox/boundingBoxApplicationService'
 import { SegmentationApplicationService } from '@/services/application/tasks/segmentation/segmentationApplicationService'
 import { SequenceLabelingApplicationService } from '@/services/application/tasks/sequenceLabeling/sequenceLabelingApplicationService'
+<<<<<<< HEAD
 import { UserApplicationService } from '~/services/application/user/userAplicationService'
+=======
+>>>>>>> tentativa
 
 export interface Services {
   categoryType: LabelApplicationService
   spanType: LabelApplicationService
   relationType: LabelApplicationService
   project: ProjectApplicationService
+<<<<<<< HEAD
   user: UserApplicationService
+=======
+>>>>>>> tentativa
   example: ExampleApplicationService
   sequenceLabeling: SequenceLabelingApplicationService
   option: OptionApplicationService
@@ -44,8 +50,12 @@ const plugin: Plugin = (_, inject) => {
     option: new OptionApplicationService(repositories.option),
     tag: new TagApplicationService(repositories.tag),
     bbox: new BoundingBoxApplicationService(repositories.boundingBox),
+<<<<<<< HEAD
     segmentation: new SegmentationApplicationService(repositories.segmentation),
     user: new UserApplicationService(repositories.user)
+=======
+    segmentation: new SegmentationApplicationService(repositories.segmentation)
+>>>>>>> tentativa
   }
   inject('services', services)
 }
