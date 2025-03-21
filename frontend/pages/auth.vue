@@ -6,6 +6,8 @@
           <v-col cols="12" sm="8" md="4">
             <form-login :login="authenticateUser" />
             <social-login :fetch-social-link="fetchSocialLink" />
+            <!-- Change to redirect to /users/create instead of showing dialog -->
+            <v-btn color="primary" @click="redirectToCreateUser">Create User</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -26,7 +28,11 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('auth', ['authenticateUser', 'fetchSocialLink'])
+    ...mapActions('auth', ['authenticateUser', 'fetchSocialLink']),
+    
+    redirectToCreateUser() {
+      this.$router.push('/users/create')
+    }
   }
 })
 </script>
